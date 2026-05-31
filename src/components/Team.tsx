@@ -26,7 +26,7 @@ export function Team() {
       <h2 className="text-center text-navy text-[2em] font-bold mb-8">הצוות שלנו</h2>
       <div className="space-y-4">
         {team.map((t) => (
-          <div key={t.name} className="bg-white p-5 rounded-lg border-r-4 border-navy flex gap-5 items-center">
+          <div key={t.name} className="bg-white p-5 rounded-lg border-r-4 border-navy flex flex-col items-center text-center gap-4 sm:flex-row sm:text-right sm:gap-5">
             <div className="shrink-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img

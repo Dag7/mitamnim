@@ -5,6 +5,36 @@ import { WaiverModal } from './WaiverModal';
 import { SignatureCanvas } from './SignatureCanvas';
 
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyAVtqP02nfpxxIb7NKk-CHwA-4l-ceBKFffMhnJSlBKCYQGoaB-a2fWQn9vlB17sLEiA/exec';
+const PAYMENT_URL = 'https://secure.cardcom.solutions/EA/EA5/d0aVLYIFPU2NEXTPg5mdog/PaymentSP';
+
+// Shown inside the pre-opened payment tab while the form saves and Cardcom loads,
+// so the user sees a branded spinner instead of a blank page during the delay.
+const PAYMENT_LOADING_HTML = `<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>מעבירים לתשלום…</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 28px;
+    background: #FFF8F2; color: #1B365D; text-align: center; padding: 24px;
+  }
+  .spinner {
+    width: 64px; height: 64px; border: 6px solid #f3ddca;
+    border-top-color: #E8762B; border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  h1 { font-size: 1.35rem; font-weight: 700; }
+  p { font-size: 1rem; color: #6b7280; }
+</style>
+</head>
+<body>
+  <div class="spinner"></div>
+  <h1>מעבירים אותך לדף התשלום המאובטח…</h1>
+  <p>אנא המתינו רגע 🔒</p>
+</body>`;
 
 export function PurchaseSection() {
   const [isVisible, setIsVisible] = useState(false);
@@ -51,6 +81,17 @@ export function PurchaseSection() {
       return;
     }
 
+    // Open the payment tab now, while we're still inside the click handler, so it
+    // isn't blocked as a popup, and paint a loading spinner into it. We only point
+    // it at the payment URL once the save succeeds (and close it if the save fails).
+    const paymentWindow = window.open('', '_blank');
+    if (paymentWindow) {
+      paymentWindow.opener = null;
+      paymentWindow.document.documentElement.innerHTML = PAYMENT_LOADING_HTML;
+      paymentWindow.document.documentElement.lang = 'he';
+      paymentWindow.document.documentElement.dir = 'rtl';
+    }
+
     const timestamp = new Date().toLocaleString('he-IL');
     const formData = {
       timestamp,
@@ -78,10 +119,14 @@ export function PurchaseSection() {
       setStatus({ text: `✅ הנתונים נשמרו בהצלחה! תאריך: ${timestamp}`, color: '#28a745' });
       setFormDisabled(true);
       setShowPayment(true);
+      if (paymentWindow) {
+        paymentWindow.location.href = PAYMENT_URL;
+      }
       setTimeout(() => {
         document.getElementById('paymentSection')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }, 300);
     } catch {
+      paymentWindow?.close();
       setStatus({ text: '❌ שגיאה בשמירה. אנא נסו שוב', color: '#dc3545' });
     }
   };
@@ -245,7 +290,7 @@ export function PurchaseSection() {
           <p className="text-xl mb-6">תודה על האישור! כעת אנא השלימו את התשלום:</p>
           <p className="text-[2.5em] font-bold text-orange my-5">₪97 לחודש</p>
           <a
-            href="https://secure.cardcom.solutions/EA/EA5/d0aVLYIFPU2NEXTPg5mdog/PaymentSP"
+            href={PAYMENT_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block bg-orange text-white font-bold text-xl px-10 py-5 rounded-lg hover:-translate-y-1 hover:shadow-lg transition-all"

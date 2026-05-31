@@ -40,3 +40,6 @@ next-env.d.ts
 
 # deploy logs
 deploy-output.log
+
+# playwright mcp artifacts
+.playwright-mcp/
