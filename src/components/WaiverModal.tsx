@@ -82,7 +82,7 @@ export function WaiverModal({ isOpen, onClose }: WaiverModalProps) {
           <li>לנשים בהריון – האם ההיריון הוגדר בסיכון?</li>
         </ol>
         <div className="bg-red-50 border border-red-300 rounded-md p-4 my-4">
-          <p><strong>אם ענית &ldquo;כן&rdquo; על שאלה כלשהי:</strong> חייב/ת להמציא אישור רפואי תוך 14 ימים. שליחה בוואטסאפ: 0522661801</p>
+          <p><strong>אם ענית &ldquo;כן&rdquo; על שאלה כלשהי:</strong> חייב/ת להמציא אישור רפואי תוך 14 ימים. שליחה בוואטסאפ: +4915125398116</p>
           <p><strong>אם ענית &ldquo;לא&rdquo; על הכל:</strong> אשר/י באמצעות הסימון למטה.</p>
         </div>
 

@@ -4,7 +4,7 @@ export function ContactSection() {
       <h3 className="text-[#128C7E] text-3xl font-bold mb-5">יש שאלות? מתלבטים?</h3>
       <p className="text-lg mb-5">דברו איתנו בוואטסאפ - נשמח לעזור ולענות על כל שאלה!</p>
       <a
-        href="https://wa.me/9720522661801"
+        href="https://wa.me/4915125398116"
         target="_blank"
         rel="noopener noreferrer"
         className="inline-block bg-whatsapp text-white font-bold text-xl px-8 py-4 rounded-lg hover:-translate-y-1 hover:shadow-lg transition-all"
